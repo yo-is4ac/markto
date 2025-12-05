@@ -7,8 +7,10 @@ use App\Models\Lista;
 
 class Item extends Model
 {
+    protected $table = 'item';
+
     protected $fillable = [
-        'list_id',
+        'lista_id',
         'name',
         'description',
         'quantity'

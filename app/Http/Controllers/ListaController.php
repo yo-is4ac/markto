@@ -19,7 +19,7 @@ class ListaController extends Controller
         try {
             $this->listaService->store($request->validated());
 
-         return response()->json([
+            return response()->json([
                 'status' => 'ok',
                 'message' => 'created'
             ], 201);
