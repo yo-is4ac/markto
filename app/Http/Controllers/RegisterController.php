@@ -2,33 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreItemRequest;
-use App\Http\Services\ItemService;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Services\RegisterService;
 use Exception;
 
-class ItemController extends Controller
+class RegisterController extends Controller
 {
     public function __construct(
-        private ItemService $itemService
-    )
-    {
-    }
+        private RegisterService $registerService
+    ){}
 
-    public function store(StoreItemRequest $request)
+    public function __invoke(RegisterRequest $request)
     {
         try {
-            $this->itemService->store($request->validated());
+            app($this->registerService::class)($request->validated());
 
             return response()->json([
                 'status' => 'ok',
                 'message' => 'created'
             ], 201);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
     }
 }
