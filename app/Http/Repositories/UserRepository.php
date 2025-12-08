@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use App\Http\Repositories\Contracts\UserContract;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserContract {
 
@@ -24,5 +25,28 @@ class UserRepository implements UserContract {
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function getUserByEmail(string $email)
+    {
+        return $this->user::where('email', '=', $email)->first();
+    }
+
+    public function exists(string $email)
+    {
+        if ($this->user->where('email', '=', $email)->exists() === false) {
+            throw new Exception('User Not Found');
+        }
+
+        return true;
+    }
+
+    public function doesPasswordMatch(string $passwordFromRequest, string $passwordStored)
+    {
+        if (Hash::check($passwordFromRequest, $passwordStored) === false) {
+            throw new Exception('Password does not match');
+        }
+
+        return true;
     }
 }
