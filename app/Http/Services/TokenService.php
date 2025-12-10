@@ -11,7 +11,7 @@ class TokenService {
     (private UserRepository $userRepository)
     {}
 
-    public function store(array $data)
+    public function attemptToAuth(array $data)
     {
         try {
             if ($this->userRepository->exists(email: $data['email']) === true) {

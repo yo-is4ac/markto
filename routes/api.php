@@ -7,9 +7,12 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TokenController;
 
 Route::post('register', RegisterController::class)->name('register');
-Route::post('token', [TokenController::class, 'store'])->name('token.store');
 
-Route::prefix('list')->name('list.')->group(function() {
+Route::prefix('auth')->name('auth.')->group(function() {
+    Route::post('token', [TokenController::class, 'auth'])->name('token');
+});
+
+Route::middleware('auth:sanctum')->prefix('list')->name('list.')->group(function() {
     Route::post('/', [ListaController::class, 'store'])->name('store');
 
     Route::prefix('item')->name('item.')->group(function(){

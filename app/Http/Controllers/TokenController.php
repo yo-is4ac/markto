@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTokenRequest;
+use App\Http\Requests\AuthTokenRequest;
 use App\Http\Services\TokenService;
 use Exception;
 
@@ -13,10 +13,10 @@ class TokenController extends Controller
     (private TokenService $tokenService)
     {}
 
-    public function store(StoreTokenRequest $request)
+    public function auth(AuthTokenRequest $request)
     {
         try {
-            $token = $this->tokenService->store($request->validated());
+            $token = $this->tokenService->attemptToAuth($request->validated());
 
             return response()->json([
                 'status' => 'logged',
