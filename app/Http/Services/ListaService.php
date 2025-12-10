@@ -9,8 +9,7 @@ class ListaService {
     public function __construct(
         private ListaRepository $listaRepository
     )
-    {
-    }
+    {}
 
     public function store(array $data) {
         try {

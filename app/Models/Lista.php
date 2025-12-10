@@ -10,8 +10,13 @@ class Lista extends Model
     protected $table = 'lista';
 
     protected $fillable = [
+        'user_id',
         'name'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
     public function item() {
         $this->hasMany(Item::class);

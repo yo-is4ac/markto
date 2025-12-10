@@ -12,8 +12,7 @@ class ListaController extends Controller
     public function __construct(
         private ListaService $listaService
     )
-    {
-    }
+    {}
 
     public function store(StoreListaRequest $request) {
         try {
