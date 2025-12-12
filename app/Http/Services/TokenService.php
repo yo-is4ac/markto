@@ -8,8 +8,9 @@ use Exception;
 class TokenService {
 
     public function __construct
-    (private UserRepository $userRepository)
-    {}
+    (
+        private UserRepository $userRepository,
+    ){}
 
     public function attemptToAuth(array $data)
     {
@@ -20,9 +21,9 @@ class TokenService {
                 if (
                     $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password) === true
                 ) {
-                    $token = $user->createToken('auth', ['*'], now()->addWeek());
-
-                    return $token->plainTextToken;
+                    if ($this->userRepository->isFirstAccess(email: $user->email) === true) {
+                        return $this->userRepository->createToken(email: $user->email);
+                    }
                 }
             }
         } catch (Exception $e) {

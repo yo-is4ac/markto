@@ -7,4 +7,6 @@ interface UserContract {
     public function getUserByEmail(string $email);
     public function exists(string $email);
     public function doesPasswordMatch(string $passwordFromRequest, string $passwordStored);
+    public function isFirstAccess(string $email);
+    public function createToken(string $email);
 }
