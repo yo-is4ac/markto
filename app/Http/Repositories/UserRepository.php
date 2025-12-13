@@ -64,8 +64,17 @@ class UserRepository implements UserContract {
 
     public function createToken(string $email)
     {
-        $token = $this->user->where('email', '=', $email)->first()->createToken('auth', ['*'], now()->addWeek());
+        $token = $this->user->where('email', '=', $email)->first()
+                    ->createToken('auth', ['*'], now()->addWeek());
 
         return $token->plainTextToken;
+    }
+
+    public function resetToken(string $email) {
+        $user =  $this->user->where('email', '=', $email)->first();
+
+        $user->tokens()->delete();
+
+        return $user->createToken(email: $email);
     }
 }

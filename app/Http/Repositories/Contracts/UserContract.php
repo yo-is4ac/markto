@@ -9,4 +9,5 @@ interface UserContract {
     public function doesPasswordMatch(string $passwordFromRequest, string $passwordStored);
     public function isFirstAccess(string $email);
     public function createToken(string $email);
+    public function resetToken(string $email);
 }

@@ -10,6 +10,7 @@ Route::post('register', RegisterController::class)->name('register');
 
 Route::prefix('auth')->name('auth.')->group(function() {
     Route::post('token', [TokenController::class, 'auth'])->name('token');
+    Route::post('reset', [TokenController::class , 'reset'])->name('reset');
 });
 
 Route::middleware('auth:sanctum')->prefix('list')->name('list.')->group(function() {
