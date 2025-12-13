@@ -9,35 +9,25 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserContract {
 
-    public function __construct(
-        private User $user
-    ){}
+    public function __construct
+    (private User $user){}
 
     public function store(string $name, string $email, string $password)
     {
         try {
-            $this->user->create([
+            return $this->user->create([
                 'name' => $name,
                 'email' => $email,
                 'password' => $password
             ]);
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception('Exception occured while trying to register new user', code: 500);
         }
     }
 
-    public function getUserByEmail(string $email)
+    public function findByEmail(string $email)
     {
         return $this->user::where('email', '=', $email)->first();
-    }
-
-    public function exists(string $email)
-    {
-        if ($this->user->where('email', '=', $email)->exists() === false) {
-            throw new Exception('User Not Found');
-        }
-
-        return true;
     }
 
     public function doesPasswordMatch(string $passwordFromRequest, string $passwordStored)
@@ -49,32 +39,10 @@ class UserRepository implements UserContract {
         return true;
     }
 
-    public function getMostRecentCreatedPersonalAccessToken(string $email)
+    public function createToken(User $user)
     {
-        return $this->user->where('email', '=', $email)->first()
-                ->personalAccessToken()
-                ->orderBy('created_at', 'desc')
-                ->first();
-    }
-
-    public function isFirstAccess(string $email)
-    {
-        return !($this->user->where('email', '=', $email)->first()->personalAccessToken()->exists());
-    }
-
-    public function createToken(string $email)
-    {
-        $token = $this->user->where('email', '=', $email)->first()
-                    ->createToken('auth', ['*'], now()->addWeek());
+        $token = $user->createToken('auth', ['*'], now()->addWeek());
 
         return $token->plainTextToken;
-    }
-
-    public function resetToken(string $email) {
-        $user =  $this->user->where('email', '=', $email)->first();
-
-        $user->tokens()->delete();
-
-        return $user->createToken(email: $email);
     }
 }

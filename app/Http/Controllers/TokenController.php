@@ -2,41 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthTokenRequest;
+use App\Http\Requests\StoreTokenRequest;
 use App\Http\Services\TokenService;
-use App\Http\Requests\ResetTokenRequest;
+use Illuminate\Http\Request;
 use Exception;
 
 class TokenController extends Controller
 {
-
     public function __construct
     (private TokenService $tokenService)
     {}
 
-    public function auth(AuthTokenRequest $request)
+    public function store(StoreTokenRequest $request)
     {
         try {
-            $token = $this->tokenService->attemptToAuth($request->validated());
+            $token = $this->tokenService->createToken($request->validated());
 
             return response()->json([
-                'status' => 'logged',
                 'token' => $token
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 'error',
                 'message' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
     }
 
-    public function reset(ResetTokenRequest $request) {
-        $token = $this->tokenService->resetToken($request->validated());
+    public function destroy(Request $request) {
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-                'status' => 'logged',
-                'token' => $token
+            'message' => 'current access revoked'
+        ], 200);
+    }
+
+    public function destroyAll(Request $request) {
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'revoked all tokens from given user'
         ], 200);
     }
 }

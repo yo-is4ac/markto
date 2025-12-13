@@ -3,52 +3,23 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\UserRepository;
-use Carbon\Carbon;
 use Exception;
 
 class TokenService {
-
     public function __construct
-    (
-        private UserRepository $userRepository,
-    ){}
+    (private UserRepository $userRepository){}
 
-    public function attemptToAuth(array $data)
+    public function createToken(array $data)
     {
+            $user = $this->userRepository->findByEmail(email: $data['email']);
+
+            if ($user === null) throw new Exception(message: 'User not found', code: 404);
+            if (! $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password)) throw new Exception(message: 'Credentials dont match');
+
         try {
-            if ($this->userRepository->exists(email: $data['email'])) {
-                $user = $this->userRepository->getUserByEmail(email: $data['email']);
-
-                if (
-                    $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password)
-                ) {
-                    if ($this->userRepository->isFirstAccess(email: $user->email)) {
-                        return $this->userRepository->createToken(email: $user->email);
-                    }
-
-                    $recentToken = $this->userRepository->getMostRecentCreatedPersonalAccessToken(email: $user->email);
-
-                    if (
-                        Carbon::now()->greaterThanOrEqualTo(
-                            Carbon::parse($recentToken->expires_at)
-                        )
-                    ) {
-                        return $this->userRepository->createToken(email: $user->email);
-                    }
-
-                    return 'user logged in another device';
-                }
-            }
+            return $this->userRepository->createToken(user: $user);
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function resetToken(array $data) {
-        try {
-             return $this->userRepository->resetToken(email: $data['email']);
-        } catch(Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception(message: $e->getMessage(), code: $e->getCode() ?? 400);
         }
     }
 }

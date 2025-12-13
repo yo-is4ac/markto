@@ -6,11 +6,17 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TokenController;
 
-Route::post('register', RegisterController::class)->name('register');
+Route::prefix('auth')->name('auth.')->group(function () {
+    Route::post('register', RegisterController::class)->name('register');
 
-Route::prefix('auth')->name('auth.')->group(function() {
-    Route::post('token', [TokenController::class, 'auth'])->name('token');
-    Route::post('reset', [TokenController::class , 'reset'])->name('reset');
+    Route::prefix('tokens')->name('tokens.')->group(function () {
+        Route::post('/', [TokenController::class, 'store'])->name('store');
+
+        Route::middleware('auth:sanctum')->group(function() {
+            Route::delete('current', [TokenController::class, 'destroy'])->name('destroy');
+            Route::delete('/', [TokenController::class, 'destroyAll'])->name('destroyAll');
+        });
+    });
 });
 
 Route::middleware('auth:sanctum')->prefix('list')->name('list.')->group(function() {
