@@ -49,11 +49,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function personalAccessToken() {
-        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
-    }
-
-    public function list() {
+    public function lista() {
         return $this->hasMany(Lista::class);
     }
 }

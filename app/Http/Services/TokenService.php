@@ -14,12 +14,12 @@ class TokenService {
             $user = $this->userRepository->findByEmail(email: $data['email']);
 
             if ($user === null) throw new Exception(message: 'User not found', code: 404);
-            if (! $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password)) throw new Exception(message: 'Credentials dont match');
+            if (! $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password)) throw new Exception(message: 'Credentials dont match', code: 400);
 
         try {
             return $this->userRepository->createToken(user: $user);
         } catch (Exception $e) {
-            throw new Exception(message: $e->getMessage(), code: $e->getCode() ?? 400);
+            throw new Exception(message: $e->getMessage(), code: $e->getCode());
         }
     }
 }

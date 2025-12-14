@@ -5,6 +5,7 @@ use App\Http\Controllers\ListaController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\SharedListaController;
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('register', RegisterController::class)->name('register');
@@ -19,10 +20,15 @@ Route::prefix('auth')->name('auth.')->group(function () {
     });
 });
 
-Route::middleware('auth:sanctum')->prefix('list')->name('list.')->group(function() {
+Route::middleware('auth:sanctum')->prefix('lista')->name('lista.')->group(function() {
     Route::post('/', [ListaController::class, 'store'])->name('store');
+    Route::get('/', [ListaController::class, 'index'])->name('index');
 
     Route::prefix('item')->name('item.')->group(function(){
         Route::post('/', [ItemController::class, 'store'])->name('create');
+    });
+
+    Route::prefix('shared')->name('shared.')->group(function() {
+        Route::get('/{code}', [SharedListaController::class, 'show'])->name('show');
     });
 });

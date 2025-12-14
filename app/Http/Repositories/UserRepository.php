@@ -32,11 +32,8 @@ class UserRepository implements UserContract {
 
     public function doesPasswordMatch(string $passwordFromRequest, string $passwordStored)
     {
-        if (Hash::check($passwordFromRequest, $passwordStored) === false) {
-            throw new Exception('Password does not match');
-        }
+        return Hash::check($passwordFromRequest, $passwordStored);
 
-        return true;
     }
 
     public function createToken(User $user)

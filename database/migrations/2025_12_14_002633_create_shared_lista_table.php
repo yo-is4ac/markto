@@ -1,10 +1,9 @@
 <?php
 
-use App\Models\User;
+use App\Models\Lista;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -13,14 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lista', function (Blueprint $table) {
+        Schema::create('shared_lista', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)
+            $table->foreignIdFor(Lista::class)
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('name');
             $table->string('code');
+            $table->json('can_access');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lista');
+        Schema::dropIfExists('shared_lista');
     }
 };

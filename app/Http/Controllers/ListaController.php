@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreListaRequest;
-use Exception;
 use App\Http\Services\ListaService;
+use Illuminate\Http\Request;
+use Exception;
 
 
 class ListaController extends Controller
@@ -19,13 +20,21 @@ class ListaController extends Controller
             $this->listaService->store($request->validated());
 
             return response()->json([
-                'status' => 'ok',
                 'message' => 'created'
             ], 201);
 
         } catch(Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function index(Request $request) {
+        try {
+            return $request->user()->lista()->paginate(15);
+        } catch (Exception $e) {
+            return response()->json([
                 'message' => $e->getMessage()
             ], 400);
         }
