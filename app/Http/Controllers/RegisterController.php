@@ -13,17 +13,10 @@ class RegisterController extends Controller
 
     public function __invoke(RegisterRequest $request)
     {
-        try {
-            $token = app($this->registerService::class)($request->validated());
+        $token = app($this->registerService::class)($request->validated());
 
-            return response()->json([
-                'message' => 'created',
-                'token' => $token
-            ], 201);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], $e->getCode());
-        }
+        return response()->json([
+            'token' => $token
+        ], 201);
     }
 }

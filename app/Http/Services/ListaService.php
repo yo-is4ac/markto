@@ -12,10 +12,6 @@ class ListaService {
     {}
 
     public function store(array $data) {
-        try {
-            $this->listaRepository->store($data['name']);
-        } catch(Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        $this->listaRepository->store($data['name']);
     }
 }

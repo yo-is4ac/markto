@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->prefix('lista')->name('lista.')->group(functi
     });
 
     Route::prefix('shared')->name('shared.')->group(function() {
+        Route::post('/', [SharedListaController::class, 'store'])->name('store');
         Route::get('/{code}', [SharedListaController::class, 'show'])->name('show');
     });
 });

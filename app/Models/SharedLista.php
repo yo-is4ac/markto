@@ -15,6 +15,6 @@ class SharedLista extends Model
     ];
 
     public function lista() {
-        // Maybe make a relation here???
+        return $this->belongsTo(Lista::class);
     }
 }

@@ -13,18 +13,11 @@ class ListaRepository implements ListaContract {
     (private Lista $lista){}
 
     public function store(string $name) {
-        try {
-            $user = Auth::user();
+        $user = Auth::user();
 
-            $code = (string) Str::uuid();
-
-            $this->lista->create([
-                'user_id' => $user->id,
-                'name' => $name,
-                'code' => substr($code, 0, 8)
-            ]);
-        } catch(Exception $e) {
-            throw new Exception(message: $e->getMessage(), code: 500);
-        }
+        $this->lista->create([
+            'user_id' => $user->id,
+            'name' => $name,
+        ]);
     }
 }

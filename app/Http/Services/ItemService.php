@@ -14,15 +14,11 @@ class ItemService {
 
     public function store(array $data)
     {
-        try {
-            $this->itemRepository->store(
-                $data['lista_id'],
-                $data['name'],
-                $data['description'],
-                $data['quantity']
-            );
-        } catch(Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        $this->itemRepository->store(
+            $data['lista_id'],
+            $data['name'],
+            $data['description'],
+            $data['quantity']
+        );
     }
 }

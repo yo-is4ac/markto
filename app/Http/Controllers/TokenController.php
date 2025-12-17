@@ -10,37 +10,22 @@ use Exception;
 class TokenController extends Controller
 {
     public function __construct
-    (private TokenService $tokenService)
-    {}
+    (private TokenService $tokenService){}
 
     public function store(StoreTokenRequest $request)
     {
-        try {
-            $token = $this->tokenService->createToken($request->validated());
+        $token = $this->tokenService->createToken($request->validated());
 
-            return response()->json([
-                'token' => $token
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
-        }
+        return response()->json([
+            'token' => $token
+        ]);
     }
 
     public function destroy(Request $request) {
         $request->user()->currentAccessToken()->delete();
-
-        return response()->json([
-            'message' => 'current access revoked'
-        ], 200);
     }
 
     public function destroyAll(Request $request) {
         $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'revoked all tokens from given user'
-        ], 200);
     }
 }

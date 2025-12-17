@@ -8,27 +8,13 @@ use Exception;
 
 class ItemController extends Controller
 {
-    public function __construct(
-        private ItemService $itemService
-    )
-    {
-    }
+    public function __construct
+    (private ItemService $itemService){}
 
     public function store(StoreItemRequest $request)
     {
-        try {
-            $this->itemService->store($request->validated());
+        $this->itemService->store($request->validated());
 
-            return response()->json([
-                'status' => 'ok',
-                'message' => 'created'
-            ], 201);
-
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return response()->noContent(201);
     }
 }

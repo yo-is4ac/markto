@@ -14,15 +14,11 @@ class UserRepository implements UserContract {
 
     public function store(string $name, string $email, string $password)
     {
-        try {
-            return $this->user->create([
-                'name' => $name,
-                'email' => $email,
-                'password' => $password
-            ]);
-        } catch (Exception $e) {
-            throw new Exception('Exception occured while trying to register new user', code: 500);
-        }
+        return $this->user->create([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ]);
     }
 
     public function findByEmail(string $email)
