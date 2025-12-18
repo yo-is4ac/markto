@@ -24,7 +24,7 @@ class StoreTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string'
         ];
     }
@@ -32,7 +32,6 @@ class StoreTokenRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'status' => 'error',
             'message' => $validator->errors(),
         ], 422));
     }

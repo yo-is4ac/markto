@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SharedLista;
+use App\Http\Requests\UpdateGuestListRequest;
+use App\Http\Services\GuestService;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller
 {
+    public function __construct
+    (
+        private GuestService $guestService
+    ){}
+
     /**
      * Display a listing of the resource.
      */
@@ -28,28 +34,7 @@ class GuestController extends Controller
      */
     public function store(Request $request)
     {
-        $sharedLista = SharedLista::where('code', '=', $request->input('code'))->first();
-
-        if (empty($sharedLista->can_access)) {
-            $sharedLista->update([
-                'can_access' => json_encode([[
-                    'time' => now(),
-                    'email' => $request->input('email')
-                ]])
-            ]);
-
-            return response()->noContent(201);
-        }
-
-        $guests = json_decode($sharedLista->can_access);
-        $guests[count($guests)] = [
-            'time' => now(),
-            'guest' => $request->input('email')
-        ];
-
-        $sharedLista->update([
-            'can_access' => json_encode($guests)
-        ]);
+        //
     }
 
     /**
@@ -71,9 +56,14 @@ class GuestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateGuestListRequest $request, string $code)
     {
-        //
+        $sharedLista = $this->guestService->update(data: $request->validated(), code: $code);
+
+        return response()->json([
+            'lista' => $sharedLista->lista->name,
+            'can_access' => json_decode($sharedLista->can_access, true)
+        ]);
     }
 
     /**

@@ -17,4 +17,25 @@ class SharedListaRepository implements SharedListaContract {
             'code' => substr(Str::uuid(), 0, 8),
         ]);
     }
+
+    public function getByCode(string $code)
+    {
+        return SharedLista::where('code', '=', $code)->first();
+    }
+
+    public function updateGuest(SharedLista $sharedLista, array $data)
+    {
+        $sharedLista->update([
+            'can_access' => json_encode($data)
+        ]);
+    }
+
+    public function guestExists(array $guestList, string $email)
+    {
+        foreach($guestList as $guest) {
+            if ($guest['email'] === $email) {
+                return true;
+            }
+        }
+    }
 }

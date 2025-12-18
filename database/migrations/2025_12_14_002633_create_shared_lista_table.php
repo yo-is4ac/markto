@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->string('code');
-            $table->json('can_access')->nullable();
+            $table->json('can_access')->default('[]');
             $table->timestamps();
         });
     }
