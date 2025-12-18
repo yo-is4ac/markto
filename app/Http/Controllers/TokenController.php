@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTokenRequest;
 use App\Http\Services\TokenService;
 use Illuminate\Http\Request;
-use Exception;
 
 class TokenController extends Controller
 {

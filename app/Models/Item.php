@@ -16,7 +16,7 @@ class Item extends Model
         'quantity'
     ];
 
-    public function list() {
-        $this->belongsTo(Lista::class);
+    public function lista() {
+        return $this->belongsTo(Lista::class);
     }
 }

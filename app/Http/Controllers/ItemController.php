@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Services\ItemService;
-use Exception;
 
 class ItemController extends Controller
 {
@@ -13,8 +12,13 @@ class ItemController extends Controller
 
     public function store(StoreItemRequest $request)
     {
-        $this->itemService->store($request->validated());
+        $item = $this->itemService->store($request->validated());
 
-        return response()->noContent(201);
+        return response()->json([
+            'id' => $item->id,
+            'lista' => $item->lista->name,
+            'name' => $item->name,
+            'created_at' => $item->created_at
+        ]);
     }
 }

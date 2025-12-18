@@ -4,7 +4,6 @@ namespace App\Http\Repositories;
 
 use App\Http\Repositories\Contracts\ItemContract;
 use App\Models\Item;
-use Exception;
 
 class ItemRepository implements ItemContract {
     public function __construct
@@ -16,7 +15,7 @@ class ItemRepository implements ItemContract {
         string $description,
         int $quantity
     ) {
-        $this->item->create([
+        return $this->item->create([
             'lista_id' => $listaId,
             'name' => $name,
             'description' => $description,

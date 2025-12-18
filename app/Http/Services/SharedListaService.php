@@ -9,6 +9,6 @@ class SharedListaService {
     (private SharedListaRepository $sharedListaRepository){}
 
     public function store(array $data) {
-        $this->sharedListaRepository->store(listaId: $data['lista_id']);
+        return $this->sharedListaRepository->store(listaId: $data['lista_id']);
     }
 }

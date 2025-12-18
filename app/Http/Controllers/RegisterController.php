@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Http\Services\RegisterService;
-use Exception;
 
 class RegisterController extends Controller
 {

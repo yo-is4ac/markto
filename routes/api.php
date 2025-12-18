@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ListaController;
 use App\Http\Controllers\ItemController;
@@ -31,5 +32,9 @@ Route::middleware('auth:sanctum')->prefix('lista')->name('lista.')->group(functi
     Route::prefix('shared')->name('shared.')->group(function() {
         Route::post('/', [SharedListaController::class, 'store'])->name('store');
         Route::get('/{code}', [SharedListaController::class, 'show'])->name('show');
+
+        Route::prefix('guest')->name('guest.')->group(function () {
+            Route::resource('/', GuestController::class);
+        });
     });
 });

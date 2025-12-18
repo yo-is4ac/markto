@@ -12,7 +12,7 @@ class SharedListaRepository implements SharedListaContract {
 
     public function store(string $listaId)
     {
-        $this->sharedLista->create([
+        return $this->sharedLista->create([
             'lista_id' => $listaId,
             'code' => substr(Str::uuid(), 0, 8),
         ]);

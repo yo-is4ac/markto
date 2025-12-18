@@ -13,12 +13,35 @@ class SharedListaController extends Controller
     (private SharedListaService $sharedListaService){}
 
     public function store(StoreSharedListaRequest $request) {
-        $this->sharedListaService->store($request->validated());
+        $sharedLista = $this->sharedListaService->store($request->validated());
 
-        return response()->noContent(201);
+        return response()->json([
+            'code' => $sharedLista->code
+        ]);
     }
 
     public function show(Request $request, string $code) {
-        return SharedLista::where('code', '=', $code)->first()->lista;
+        $sharedLista =  SharedLista::where('code', '=', $code)->first();
+        $lista = $sharedLista->lista;
+
+        foreach($lista->item as $index => $item) {
+            $items[$index] = [
+                'name' => $item->name,
+                'description' => $item->description,
+                'quantity' => $item->quantity
+            ];
+        }
+
+        $guests = json_decode($sharedLista->can_access);
+
+        foreach($guests as $guest) {
+            if ($guest->guest === $request->user()->email) {
+                return response()->json([
+                    'code' => $sharedLista->code,
+                    'name' => $lista->name,
+                    'items' => $items
+                ]);
+            }
+        }
     }
 }

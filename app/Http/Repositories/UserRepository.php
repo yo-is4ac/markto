@@ -4,7 +4,6 @@ namespace App\Http\Repositories;
 
 use App\Http\Repositories\Contracts\UserContract;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserContract {
