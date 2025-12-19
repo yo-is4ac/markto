@@ -8,22 +8,21 @@ use Illuminate\Http\Request;
 
 class ListaController extends Controller
 {
-    public function __construct
-    (private ListaService $listaService){}
+    public function __construct(private ListaService $listaService) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $listas = $request->user()->lista->map(function ($lista) {
 
             return [
                 'id' => $lista->id,
                 'name' => $lista->name,
-                'created_at' => $lista->created_at
+                'created_at' => $lista->created_at,
             ];
         });
-
 
         return response()->json($listas);
     }
@@ -39,15 +38,17 @@ class ListaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreListaRequest $request) {
+    public function store(StoreListaRequest $request)
+    {
         $lista = $this->listaService->store($request->validated());
 
         return response()->json([
             'id' => $lista->id,
             'name' => $lista->name,
-            'created_at' => $lista->created_at
+            'created_at' => $lista->created_at,
         ], 201);
     }
+
     /**
      * Display the specified resource.
      */

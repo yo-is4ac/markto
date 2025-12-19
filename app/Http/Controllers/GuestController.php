@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class GuestController extends Controller
 {
-    public function __construct
-    (
+    public function __construct(
         private GuestService $guestService
-    ){}
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -62,7 +61,7 @@ class GuestController extends Controller
 
         return response()->json([
             'lista' => $sharedLista->lista->name,
-            'can_access' => json_decode($sharedLista->can_access, true)
+            'can_access' => json_decode($sharedLista->can_access, true),
         ]);
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreItemRequest extends FormRequest
@@ -25,9 +25,9 @@ class StoreItemRequest extends FormRequest
     {
         return [
             'lista_id' => 'required|integer',
-	        'name' => 'required|string',
-	        'description' => 'string',
-	        'quantity' => 'integer'
+            'name' => 'required|string',
+            'description' => 'string',
+            'quantity' => 'integer',
         ];
     }
 

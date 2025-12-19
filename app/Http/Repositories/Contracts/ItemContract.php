@@ -2,7 +2,8 @@
 
 namespace App\Http\Repositories\Contracts;
 
-interface ItemContract {
+interface ItemContract
+{
     public function store(
         int $listaId,
         string $name,

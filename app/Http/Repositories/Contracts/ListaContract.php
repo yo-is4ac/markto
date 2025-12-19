@@ -2,7 +2,8 @@
 
 namespace App\Http\Repositories\Contracts;
 
-interface ListaContract {
+interface ListaContract
+{
     public function store(
         string $name
     );

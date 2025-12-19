@@ -6,17 +6,16 @@ use App\Http\Repositories\Contracts\UserContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class UserRepository implements UserContract {
-
-    public function __construct
-    (private User $user){}
+class UserRepository implements UserContract
+{
+    public function __construct(private User $user) {}
 
     public function store(string $name, string $email, string $password)
     {
         return $this->user->create([
             'name' => $name,
             'email' => $email,
-            'password' => $password
+            'password' => $password,
         ]);
     }
 

@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    public function __construct
-    (private ItemService $itemService){}
+    public function __construct(private ItemService $itemService) {}
 
     /**
      * Display a listing of the resource.
@@ -38,7 +37,7 @@ class ItemController extends Controller
             'id' => $item->id,
             'lista' => $item->lista->name,
             'name' => $item->name,
-            'created_at' => $item->created_at
+            'created_at' => $item->created_at,
         ]);
     }
 

@@ -11,10 +11,11 @@ class SharedLista extends Model
     protected $fillable = [
         'lista_id',
         'code',
-        'can_access'
+        'can_access',
     ];
 
-    public function lista() {
+    public function lista()
+    {
         return $this->belongsTo(Lista::class);
     }
 }

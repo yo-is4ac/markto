@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateGuestListRequest extends FormRequest
@@ -24,7 +24,7 @@ class UpdateGuestListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email'
+            'email' => 'required|string|email',
         ];
     }
 

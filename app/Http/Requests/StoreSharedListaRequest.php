@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreSharedListaRequest extends FormRequest
@@ -24,7 +24,7 @@ class StoreSharedListaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lista_id' => 'required|integer'
+            'lista_id' => 'required|integer',
         ];
     }
 

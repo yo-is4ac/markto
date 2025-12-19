@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Item;
 
 class Lista extends Model
 {
@@ -14,11 +13,13 @@ class Lista extends Model
         'name',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function item() {
+    public function item()
+    {
         return $this->hasMany(Item::class);
     }
 }

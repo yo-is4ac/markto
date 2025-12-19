@@ -6,9 +6,9 @@ use App\Http\Repositories\Contracts\SharedListaContract;
 use App\Models\SharedLista;
 use Illuminate\Support\Str;
 
-class SharedListaRepository implements SharedListaContract {
-    public function __construct
-    (private SharedLista $sharedLista){}
+class SharedListaRepository implements SharedListaContract
+{
+    public function __construct(private SharedLista $sharedLista) {}
 
     public function store(string $listaId)
     {
@@ -26,13 +26,13 @@ class SharedListaRepository implements SharedListaContract {
     public function updateGuest(SharedLista $sharedLista, array $data)
     {
         $sharedLista->update([
-            'can_access' => json_encode($data)
+            'can_access' => json_encode($data),
         ]);
     }
 
     public function guestExists(array $guestList, string $email)
     {
-        foreach($guestList as $guest) {
+        foreach ($guestList as $index => $guest) {
             if ($guest['email'] === $email) {
                 return true;
             }

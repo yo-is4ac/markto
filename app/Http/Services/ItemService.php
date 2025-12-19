@@ -4,10 +4,9 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\ItemRepository;
 
-class ItemService {
-
-    public function __construct
-    (private ItemRepository $itemRepository){}
+class ItemService
+{
+    public function __construct(private ItemRepository $itemRepository) {}
 
     public function store(array $data)
     {

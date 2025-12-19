@@ -5,9 +5,9 @@ namespace App\Http\Repositories;
 use App\Http\Repositories\Contracts\ItemContract;
 use App\Models\Item;
 
-class ItemRepository implements ItemContract {
-    public function __construct
-    (private Item $item){}
+class ItemRepository implements ItemContract
+{
+    public function __construct(private Item $item) {}
 
     public function store(
         int $listaId,
@@ -19,7 +19,7 @@ class ItemRepository implements ItemContract {
             'lista_id' => $listaId,
             'name' => $name,
             'description' => $description,
-            'quantity' => $quantity
+            'quantity' => $quantity,
         ]);
     }
 }

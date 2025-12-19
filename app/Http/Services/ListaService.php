@@ -4,15 +4,14 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\ListaRepository;
 
-class ListaService {
-    public function __construct
-    (private ListaRepository $listaRepository){}
+class ListaService
+{
+    public function __construct(private ListaRepository $listaRepository) {}
 
-    public function store(array $data) {
+    public function store(array $data)
+    {
         return $this->listaRepository->store($data['name']);
     }
 
-    public function show() {
-
-    }
+    public function show() {}
 }

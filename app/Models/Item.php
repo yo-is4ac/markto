@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Lista;
 
 class Item extends Model
 {
@@ -13,10 +12,11 @@ class Item extends Model
         'lista_id',
         'name',
         'description',
-        'quantity'
+        'quantity',
     ];
 
-    public function lista() {
+    public function lista()
+    {
         return $this->belongsTo(Lista::class);
     }
 }

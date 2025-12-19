@@ -5,13 +5,15 @@ namespace App\Http\Services;
 use App\Http\Repositories\UserRepository;
 use Exception;
 
-class RegisterService {
-    public function __construct
-    (private UserRepository $userRepository){}
+class RegisterService
+{
+    public function __construct(private UserRepository $userRepository) {}
 
     public function __invoke(array $data)
     {
-        if ($this->userRepository->findByEmail(email: $data['email'])) throw new Exception(message: 'User already registered', code: 400);
+        if ($this->userRepository->findByEmail(email: $data['email'])) {
+            throw new Exception(message: 'User already registered');
+        }
 
         $user = $this->userRepository->store(name: $data['name'], email: $data['email'], password: $data['password']);
 

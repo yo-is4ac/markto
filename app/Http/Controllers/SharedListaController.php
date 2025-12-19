@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreSharedListaRequest;
 use App\Http\Services\SharedListaService;
 use App\Models\SharedLista;
+use Illuminate\Http\Request;
 
 class SharedListaController extends Controller
 {
-    public function __construct
-    (private SharedListaService $sharedListaService){}
+    public function __construct(private SharedListaService $sharedListaService) {}
 
     /**
      * Display a listing of the resource.
@@ -31,42 +30,34 @@ class SharedListaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSharedListaRequest $request) {
+    public function store(StoreSharedListaRequest $request)
+    {
         $sharedLista = $this->sharedListaService->store($request->validated());
 
         return response()->json([
-            'code' => $sharedLista->code
+            'code' => $sharedLista->code,
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $code) {
-        $sharedLista =  SharedLista::where('code', '=', $code)->first();
-        $lista = $sharedLista->lista;
+    public function show(Request $request, string $code)
+    {
+        $sharedLista = SharedLista::where('code', '=', $code)->first();
 
-        foreach($lista->item as $index => $item) {
-            $items[$index] = [
-                'name' => $item->name,
-                'description' => $item->description,
-                'quantity' => $item->quantity
-            ];
-        }
-
-        $guests = json_decode($sharedLista->can_access);
-
-        foreach($guests as $guest) {
-            if ($guest->guest === $request->user()->email) {
-                return response()->json([
-                    'code' => $sharedLista->code,
-                    'name' => $lista->name,
-                    'items' => $items
-                ]);
-            }
-        }
-
-        return response()->noContent(421);
+        return response()->json([
+            'lista' => $sharedLista->lista->name,
+            'item' => array_map(function ($lista) {
+                return [
+                    'id' => $lista['id'],
+                    'name' => $lista['name'],
+                    'description' => $lista['description'],
+                    'quantity' => $lista['quantity'],
+                    'created_at' => $lista['created_at'],
+                ];
+            }, $sharedLista->lista->item->toArray()),
+        ]);
     }
 
     /**
