@@ -55,7 +55,13 @@ class ItemController extends Controller
             throw new Exception('You have no permission to perform this action');
         }
 
-        return $item;
+        return [
+            'id' => $item->id,
+            'lista_id' => $item->lista->id,
+            'name' => $item->name,
+            'description' => $item->description,
+            'quantity' => $item->quantity
+        ];
     }
 
     /**

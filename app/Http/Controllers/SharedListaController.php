@@ -15,9 +15,13 @@ class SharedListaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $listas = $request->user()->lista;
+
+        return $listas->map(function($lista) {
+            return $lista->sharedLista ?? null;
+        });
     }
 
     /**
@@ -33,7 +37,8 @@ class SharedListaController extends Controller
      */
     public function store(StoreSharedListaRequest $request)
     {
-        if ($request->user()->lista->where('id', '=', $request->input('lista_id'))->exists() === false) throw new Exception('Action not permitted');
+        $lista = $request->user()->lista->where('id', '=', $request->input('lista_id'));
+        if ($lista->isEmpty()) throw new Exception('Action not permitted');
 
         $sharedLista = $this->sharedListaService->store($request->validated());
 
@@ -48,6 +53,20 @@ class SharedListaController extends Controller
     public function show(Request $request, string $code)
     {
         $sharedLista = SharedLista::where('code', '=', $code)->first();
+
+        $guests = json_decode($sharedLista->can_access, true);
+        $included = false;
+
+        foreach($guests as $guest) {
+            if ($guest['email'] === $request->user()->email) {
+                $included = true;
+                break;
+            }
+        }
+
+        if (! $included) {
+            throw new Exception('User has no permissions');
+        }
 
         return response()->json([
             'lista' => $sharedLista->lista->name,

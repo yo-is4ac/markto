@@ -18,6 +18,10 @@ class Lista extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function sharedLista() {
+        return $this->hasOne(SharedLista::class);
+    }
+
     public function item()
     {
         return $this->hasMany(Item::class);

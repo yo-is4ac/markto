@@ -61,7 +61,13 @@ class ListaController extends Controller
             throw new Exception('Lista Not Found');
         }
 
-        return $lista;
+        return [
+            'id' => $lista->id,
+            'user_id' => $lista->user_id,
+            'name' => $lista->name,
+            'item' => $lista->item
+        ];
+
     }
 
     /**

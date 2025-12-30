@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')
             ->group(function () {
                 Route::post('/', 'store')->name('store');
                 Route::get('/', 'index')->name('index');
+                Route::get('{id}', 'show')->name('show');
             });
 
         // Lista:Item
@@ -58,6 +59,7 @@ Route::middleware('auth:sanctum')
             ->controller(SharedListaController::class)
             ->group(function () {
                 Route::post('/', 'store')->name('store');
+                Route::get('/', 'index')->name('index');
                 Route::get('{code}', 'show')->name('show');
 
                 // Lista:Shared:Guest
