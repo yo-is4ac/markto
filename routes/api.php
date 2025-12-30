@@ -8,33 +8,66 @@ use App\Http\Controllers\SharedListaController;
 use App\Http\Controllers\TokenController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->name('auth.')->group(function () {
-    Route::post('register', RegisterController::class)->name('register');
+// Auth
+Route::prefix('auth')
+    ->name('auth.')
+    ->group(function () {
+        // Register
+        Route::post('register', RegisterController::class)->name('register');
 
-    Route::prefix('tokens')->name('tokens.')->group(function () {
-        Route::post('/', [TokenController::class, 'store'])->name('store');
+        // Login
+        Route::prefix('tokens')
+            ->name('tokens.')
+            ->controller(TokenController::class)
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
 
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::delete('current', [TokenController::class, 'destroy'])->name('destroy');
-            Route::delete('/', [TokenController::class, 'destroyAll'])->name('destroyAll');
-        });
+                // Log Out
+                Route::middleware('auth:sanctum')->group(function () {
+                    // Log Out From Current Device
+                    Route::delete('current', 'destroy')->name('destroy');
+                    // Log Out All
+                    Route::delete('/', 'destroyAll')->name('destroyAll');
+                });
+            });
     });
-});
 
-Route::middleware('auth:sanctum')->prefix('lista')->name('lista.')->group(function () {
-    Route::post('/', [ListaController::class, 'store'])->name('store');
-    Route::get('/', [ListaController::class, 'index'])->name('index');
+// Lista
+Route::middleware('auth:sanctum')
+    ->prefix('lista')
+    ->name('lista.')
+    ->group(function () {
+        Route::controller(ListaController::class)
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/', 'index')->name('index');
+            });
 
-    Route::prefix('item')->name('item.')->group(function () {
-        Route::post('/', [ItemController::class, 'store'])->name('store');
+        // Lista:Item
+        Route::prefix('item')
+            ->name('item.')
+            ->controller(ItemController::class)
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('{id}', 'show')->name('show');
+            });
+
+        // Lista:Shared
+        Route::prefix('shared')
+            ->name('shared.')
+            ->controller(SharedListaController::class)
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('{code}', 'show')->name('show');
+
+                // Lista:Shared:Guest
+                Route::prefix('guest')
+                    ->controller(GuestController::class)
+                    ->group(function () {
+                        Route::put('{code}', 'update')->name('guest.update');
+                    });
+            });
+
+        // Wild card that was causing trouble to this guy here! put it in the last position due misunderstood with what is an id or not
+        Route::get('{id}', [ListaController::class, 'show'])->whereNumber('id')->name('show');
     });
-
-    Route::prefix('shared')->name('shared.')->group(function () {
-        Route::post('/', [SharedListaController::class, 'store'])->name('store');
-        Route::get('/{code}', [SharedListaController::class, 'show'])->name('show');
-
-        Route::prefix('guest')->name('guest.')->group(function () {
-            Route::put('/{code}', [GuestController::class, 'update']);
-        });
-    });
-});

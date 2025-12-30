@@ -16,6 +16,7 @@ class TokenService
         if ($user === null) {
             throw new Exception(message: 'User not found');
         }
+
         if (! $this->userRepository->doesPasswordMatch(passwordFromRequest: $data['password'], passwordStored: $user->password)) {
             throw new Exception(message: 'Credentials dont match');
         }

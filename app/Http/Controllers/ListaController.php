@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreListaRequest;
 use App\Http\Services\ListaService;
+use Exception;
 use Illuminate\Http\Request;
 
 class ListaController extends Controller
@@ -52,9 +53,15 @@ class ListaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
-        //
+        $lista = $request->user()->lista->where('id', '=', $id)->first();
+
+        if ($lista === null) {
+            throw new Exception('Lista Not Found');
+        }
+
+        return $lista;
     }
 
     /**

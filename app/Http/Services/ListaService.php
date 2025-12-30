@@ -12,6 +12,4 @@ class ListaService
     {
         return $this->listaRepository->store($data['name']);
     }
-
-    public function show() {}
 }

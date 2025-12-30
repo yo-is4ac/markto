@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSharedListaRequest;
 use App\Http\Services\SharedListaService;
 use App\Models\SharedLista;
+use Exception;
 use Illuminate\Http\Request;
 
 class SharedListaController extends Controller
@@ -32,6 +33,8 @@ class SharedListaController extends Controller
      */
     public function store(StoreSharedListaRequest $request)
     {
+        if ($request->user()->lista->where('id', '=', $request->input('lista_id'))->exists() === false) throw new Exception('Action not permitted');
+
         $sharedLista = $this->sharedListaService->store($request->validated());
 
         return response()->json([

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Services\ItemService;
+use App\Models\Item;
+use Exception;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -13,7 +15,7 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }
@@ -38,15 +40,22 @@ class ItemController extends Controller
             'lista' => $item->lista->name,
             'name' => $item->name,
             'created_at' => $item->created_at,
-        ]);
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
-        //
+        $item = Item::where('id', '=', $id)->first();
+        $ownerId = $item->lista->user_id;
+
+        if ($request->user()->id !== $ownerId) {
+            throw new Exception('You have no permission to perform this action');
+        }
+
+        return $item;
     }
 
     /**
