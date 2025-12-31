@@ -14,24 +14,23 @@ class SharedListaRepository implements SharedListaContract
     ) {}
 
     public function index() {
-      //  $userSharedListas = Auth::user()->lista->filter(function ($lista) {
-       //     return $lista->sharedLista !== null;
-       // })->map(function ($lista) {
-        //    return $lista->sharedLista;
-       // });
+        $userCreatedSharedLista = Auth::user()->lista->map(function($lista) {
+            return $lista->sharedLista;
+        });
 
-        $listas = $this->sharedLista->all();
 
-        $sharedListas = $listas
-            ->map(function ($lista) {
-                foreach($lista->can_access as $guest) {
-                    if ($guest->email === Auth::user()->email) {
-                        return $lista;
-                    }
+        $userCanAccess = SharedLista::all()->filter(function ($sharedLista) {
+            foreach($sharedLista->can_access as $guest){
+                if ($guest === Auth::user()->emai) {
+                    return $sharedLista;
                 }
-            });
+            }
+        });
 
-        return $sharedListas;
+        return [
+            'own' => $userCreatedSharedLista,
+            'can_access' => $userCanAccess
+        ];
     }
 
     public function store(string $listaId)

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSharedListaRequest;
 use App\Http\Services\SharedListaService;
 use App\Models\SharedLista;
 use Exception;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 
 class SharedListaController extends Controller
@@ -44,18 +45,22 @@ class SharedListaController extends Controller
     {
         $sharedLista = SharedLista::where('code', '=', $code)->first();
 
-        $guests = json_decode($sharedLista->can_access, true);
-        $included = false;
+        if ($sharedLista->lista->user->email !== $request->user()->email) {
 
-        foreach($guests as $guest) {
-            if ($guest['email'] === $request->user()->email) {
-                $included = true;
-                break;
+            $guests = $sharedLista->can_access;
+
+            $included = false;
+
+            foreach($guests as $guest) {
+                if ($guest['email'] === $request->user()->email) {
+                    $included = true;
+                    break;
+                }
             }
-        }
 
-        if (! $included) {
-            throw new Exception('User has no permissions');
+            if (! $included) {
+                throw new Exception('User has no permissions');
+            }
         }
 
         return response()->json([
