@@ -15,21 +15,11 @@ class SharedListaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $listas = $request->user()->lista;
+        $sharedListas = $this->sharedListaService->index();
 
-        return $listas->map(function($lista) {
-            return $lista->sharedLista ?? null;
-        });
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return $sharedListas;
     }
 
     /**
@@ -80,14 +70,6 @@ class SharedListaController extends Controller
                 ];
             }, $sharedLista->lista->item->toArray()),
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**

@@ -10,4 +10,8 @@ interface ItemContract
         string $description,
         int $quantity
     );
+
+    public function show(
+        string $id
+    );
 }

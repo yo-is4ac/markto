@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\JsonCast;
 use Illuminate\Database\Eloquent\Model;
 
 class SharedLista extends Model
@@ -18,4 +19,8 @@ class SharedLista extends Model
     {
         return $this->belongsTo(Lista::class);
     }
+
+    protected $casts = [
+        'can_access' => JsonCast::class
+    ];
 }

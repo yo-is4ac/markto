@@ -6,6 +6,8 @@ use App\Models\SharedLista;
 
 interface SharedListaContract
 {
+    public function index();
+
     public function store(string $listaId);
 
     public function getByCode(string $code);

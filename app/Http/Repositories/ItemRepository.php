@@ -22,4 +22,9 @@ class ItemRepository implements ItemContract
             'quantity' => $quantity,
         ]);
     }
+
+    public function show(string $id)
+    {
+        return $this->item->where('id', '=', $id)->first();
+    }
 }

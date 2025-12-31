@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreListaRequest;
+use App\Http\Resources\ListaResource;
 use App\Http\Services\ListaService;
-use Exception;
 use Illuminate\Http\Request;
 
 class ListaController extends Controller
@@ -14,26 +14,9 @@ class ListaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $listas = $request->user()->lista->map(function ($lista) {
-
-            return [
-                'id' => $lista->id,
-                'name' => $lista->name,
-                'created_at' => $lista->created_at,
-            ];
-        });
-
-        return response()->json($listas);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response($this->listaService->index());
     }
 
     /**
@@ -43,39 +26,19 @@ class ListaController extends Controller
     {
         $lista = $this->listaService->store($request->validated());
 
-        return response()->json([
-            'id' => $lista->id,
-            'name' => $lista->name,
-            'created_at' => $lista->created_at,
-        ], 201);
+        return response()->json(
+            new ListaResource($lista)
+        , 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Request $request)
+    public function show(string $id)
     {
-        $lista = $request->user()->lista->where('id', '=', $id)->first();
+        $lista = $this->listaService->show($id);
 
-        if ($lista === null) {
-            throw new Exception('Lista Not Found');
-        }
-
-        return [
-            'id' => $lista->id,
-            'user_id' => $lista->user_id,
-            'name' => $lista->name,
-            'item' => $lista->item
-        ];
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response(new ListaResource($lista));
     }
 
     /**
